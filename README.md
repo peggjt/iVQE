@@ -1,0 +1,2 @@
+# IncPot
+Incremental Decomposition Algorithm

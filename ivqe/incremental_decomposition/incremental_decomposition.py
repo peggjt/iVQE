@@ -9,6 +9,7 @@ Incremental Decomposition.
 
 from itertools import combinations
 from pyscf import scf, cc, ci, fci
+from ivqe.electronic_structure_solver import VariationalQuantumEigensolver
 
 
 class IncrementalDecomposition:
@@ -32,8 +33,8 @@ class IncrementalDecomposition:
         self.n_body_truncation = n_body_truncation
         self.fragment_threshold = fragment_threshold or 0.0
 
-    def execute(self, molecule):
-        r"""Execute main code.
+    def run(self, molecule):
+        r"""Run main code.
 
         Args:
             molecule: (:obj:`pyscf.gto.mole.Mole`): The pyscf molecule class.
@@ -211,6 +212,9 @@ class IncrementalDecomposition:
 
         elif post_hf_method == "cisd":
             return ci.CISD(mf=mean_field, frozen=frozen)
+
+        elif post_hf_method in ["variational_quantum_eigensolver", "vqe"]:
+            return VariationalQuantumEigensolver(molecule=mean_field.mol, frozen=frozen)
 
         else:
             raise ValueError(f"The post-HF method is unknown: {self.post_hf_method}.")

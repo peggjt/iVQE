@@ -3,8 +3,8 @@
 
 import unittest
 
-from incpot.molecule import Molecule
-from incpot.incremental_decomposition import IncrementalDecomposition
+from ivqe.molecule import Molecule
+from ivqe.incremental_decomposition import IncrementalDecomposition
 
 
 class TestIncrementalDecomposition(unittest.TestCase):
@@ -20,7 +20,7 @@ class TestIncrementalDecomposition(unittest.TestCase):
         idm = IncrementalDecomposition()
         idm.post_hf_method = "ccsd"
         idm.n_body_truncation = 3
-        idm.execute(molecule)
+        idm.run(molecule)
 
     def test_basic_cisd(self):
         r"""Test restricted Hartree-Fock mean-field."""
@@ -32,7 +32,7 @@ class TestIncrementalDecomposition(unittest.TestCase):
         idm = IncrementalDecomposition()
         idm.post_hf_method = "cisd"
         idm.n_body_truncation = 3
-        results = idm.execute(molecule)
+        results = idm.run(molecule)
 
         print(results)
 
@@ -46,7 +46,7 @@ class TestIncrementalDecomposition(unittest.TestCase):
         idm = IncrementalDecomposition()
         idm.post_hf_method = "vqe"
         idm.n_body_truncation = 2
-        results = idm.execute(molecule)
+        results = idm.run(molecule)
 
         print(results)
 
@@ -74,7 +74,7 @@ class TestIncrementalDecomposition(unittest.TestCase):
         idm.post_hf_method = "ccsd"
         idm.n_body_truncation = 3
         idm.fragment_threshold = 0.004
-        results = idm.execute(molecule)
+        results = idm.run(molecule)
 
         print(results)
 

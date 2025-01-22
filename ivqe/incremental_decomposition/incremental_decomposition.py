@@ -9,7 +9,7 @@ Incremental Decomposition.
 
 from itertools import combinations
 from pyscf import scf, cc, ci, fci
-from incpot.electronic_structure_solver import VariationalQuantumEigensolver
+from ivqe.electronic_structure_solver import VariationalQuantumEigensolver
 
 
 class IncrementalDecomposition:
@@ -33,8 +33,8 @@ class IncrementalDecomposition:
         self.n_body_truncation = n_body_truncation
         self.fragment_threshold = fragment_threshold or 0.0
 
-    def execute(self, molecule):
-        r"""Execute main code.
+    def run(self, molecule):
+        r"""Run main code.
 
         Args:
             molecule: (:obj:`pyscf.gto.mole.Mole`): The pyscf molecule class.
@@ -137,14 +137,9 @@ class IncrementalDecomposition:
 
                     # Execute post Hartree-Fock method.
                     frozen = [f for f in self.occupied_orbitals if f not in i]
-                    if self.post_hf_method in ["variational_quantum_eigensolver", "vqe"]:
-                        post_hf_method = self.find_post_hf_method(
-                            mean_field=mean_field, frozen=frozen
+                    post_hf_method = self.find_post_hf_method(
+                        mean_field=mean_field, frozen=frozen
                     )
-                    else:
-                        post_hf_method = self.find_post_hf_method(
-                            mean_field=mean_field, frozen=frozen
-                        )
                     post_hf_method.run()
 
                     data[n][i]["energy_total"] = post_hf_method.e_tot

@@ -1,5 +1,5 @@
 import unittest
-from incpot.molecule import Molecule
+from ivqe.molecule import Molecule
 
 
 class TestMolecule(unittest.TestCase):

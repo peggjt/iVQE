@@ -1,6 +1,6 @@
 import unittest
-from incpot.molecule import Molecule
-from incpot.electronic_structure_solver.variational_quantum_eigensolver import VariationalQuantumEigensolver
+from ivqe.molecule import Molecule
+from ivqe.electronic_structure_solver.variational_quantum_eigensolver import VariationalQuantumEigensolver
 
 
 class TestMolecule(unittest.TestCase):
@@ -13,21 +13,23 @@ class TestMolecule(unittest.TestCase):
         molecule.basis = 'sto3g'
         molecule = molecule.build()
 
-        vqe = VariationalQuantumEigensolver()
+        vqe = VariationalQuantumEigensolver(molecule=molecule)
 
         results = []
         active_occupied_orbitals = [1,2,3,4]
         for i in range(len(active_occupied_orbitals)):
             remove_orbitals = [orbital for j, orbital in enumerate(active_occupied_orbitals) if j != i]
             print(remove_orbitals)
-            result = vqe.main(molecule=molecule, remove_orbitals=remove_orbitals)
+            result = vqe.frozen=remove_orbitals
+            result = vqe.run()
             print(result["energy_total"])
             results.append(result["energy_total"])
 
         for i in results:
             print(i)
 
-        result = vqe.run(molecule=molecule, remove_orbitals=[2,3])
+        vqe.frozen=[2,3]
+        result = vqe.run()
         print(result["energy_total"])
 
 if __name__ == '__main__':

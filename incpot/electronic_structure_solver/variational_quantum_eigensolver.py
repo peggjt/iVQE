@@ -12,11 +12,14 @@ from qiskit_nature.second_q.algorithms import GroundStateEigensolver
 
 class VariationalQuantumEigensolver:
 
-    def __init__(self):
-        pass
+    def __init__(self, molecule=None, frozen=None):
+        self.molecule=molecule
+        self.frozen=frozen
+        self.e_tot = None
 
-    def main(self, molecule, remove_orbitals=None):
+    def run(self):
         # Form molecule
+        molecule = self.molecule
         molecule = PySCFDriver(
             atom=molecule.atom,
             basis=molecule.basis,
@@ -32,7 +35,7 @@ class VariationalQuantumEigensolver:
         # unoccupied spatial orbitals can be removed via a list of indices passed to 
         # remove_orbitals. It is the user’s responsibility to ensure that these are 
         # indeed unoccupied orbitals, as no checks are performed.
-        transformer = FreezeCoreTransformer(remove_orbitals=remove_orbitals)
+        transformer = FreezeCoreTransformer(remove_orbitals=self.frozen)
         molecule = transformer.transform(molecule)
         print(
             "Number of spin orbitals after freezing core:", molecule.num_spin_orbitals
@@ -59,6 +62,9 @@ class VariationalQuantumEigensolver:
         # Ground-State Eigensolver
         calc = GroundStateEigensolver(mapper, vqe_solver)
         res = calc.solve(molecule)
+
+        # Results
         results = {"energy_total": res.total_energies}
+        self.e_tot = res.total_energies
 
         return results

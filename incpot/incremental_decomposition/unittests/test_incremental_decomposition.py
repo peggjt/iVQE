@@ -36,6 +36,20 @@ class TestIncrementalDecomposition(unittest.TestCase):
 
         print(results)
 
+    def test_basic_variational_quantum_eigensolver(self):
+        r"""Test restricted Hartree-Fock mean-field."""
+        molecule = Molecule()
+        molecule.coordinates = "O 0 0 0; H 0 1 0; H 0 0 1"
+        molecule.basis = "sto3g"
+        molecule = molecule.build()
+
+        idm = IncrementalDecomposition()
+        idm.post_hf_method = "vqe"
+        idm.n_body_truncation = 2
+        results = idm.execute(molecule)
+
+        print(results)
+
     def test_fragment_screening(self):
         r"""Test fragment screening"""
         molecule = Molecule()

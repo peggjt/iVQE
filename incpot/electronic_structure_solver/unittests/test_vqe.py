@@ -27,7 +27,7 @@ class TestMolecule(unittest.TestCase):
         for i in results:
             print(i)
 
-        result = vqe.main(molecule=molecule, remove_orbitals=[2,3])
+        result = vqe.run(molecule=molecule, remove_orbitals=[2,3])
         print(result["energy_total"])
 
 if __name__ == '__main__':

@@ -9,6 +9,7 @@ Incremental Decomposition.
 
 from itertools import combinations
 from pyscf import scf, cc, ci, fci
+from incpot.electronic_structure_solver import VariationalQuantumEigensolver
 
 
 class IncrementalDecomposition:
@@ -136,9 +137,14 @@ class IncrementalDecomposition:
 
                     # Execute post Hartree-Fock method.
                     frozen = [f for f in self.occupied_orbitals if f not in i]
-                    post_hf_method = self.find_post_hf_method(
-                        mean_field=mean_field, frozen=frozen
+                    if self.post_hf_method in ["variational_quantum_eigensolver", "vqe"]:
+                        post_hf_method = self.find_post_hf_method(
+                            mean_field=mean_field, frozen=frozen
                     )
+                    else:
+                        post_hf_method = self.find_post_hf_method(
+                            mean_field=mean_field, frozen=frozen
+                        )
                     post_hf_method.run()
 
                     data[n][i]["energy_total"] = post_hf_method.e_tot
@@ -211,6 +217,9 @@ class IncrementalDecomposition:
 
         elif post_hf_method == "cisd":
             return ci.CISD(mf=mean_field, frozen=frozen)
+
+        elif post_hf_method in ["variational_quantum_eigensolver", "vqe"]:
+            return VariationalQuantumEigensolver(molecule=mean_field.mol, frozen=frozen)
 
         else:
             raise ValueError(f"The post-HF method is unknown: {self.post_hf_method}.")

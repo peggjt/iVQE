@@ -276,7 +276,7 @@ class IncrementalDecomposition:
             energy_correlation (`float`): The total correlation energy.
         """
         energy_correlation = 0
-        for n in range(1, self.n_body_truncation):
+        for n in range(1, self.n_body_truncation+1):
             energy_correlation += data[n]["energy_correlation"]
 
         energy_total = mean_field.e_tot + energy_correlation
